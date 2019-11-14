@@ -1,3 +1,0 @@
-[submodule "agupta/dm_control"]
-	path = agupta/dm_control
-	url = git@github.com:deepmind/dm_control.git
