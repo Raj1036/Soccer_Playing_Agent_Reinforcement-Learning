@@ -1,4 +1,4 @@
-# `dm_control`: The DeepMind Control Suite and Package
+# `dm_control`: The DeepMind Control Suite and Package (CS525 Modified)
 
 # ![all domains](all_domains.png)
 
