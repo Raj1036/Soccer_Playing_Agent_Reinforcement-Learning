@@ -58,7 +58,7 @@ SUITE = containers.TaggedTasks()
 
 
 def make_model(floor_size=None, terrain=False, rangefinders=False,
-               walls_and_ball=False):
+               walls_and_ball=False, goal=False):
   """Returns the model XML string."""
   xml_string = common.read_model('quadruped.xml')
   parser = etree.XMLParser(remove_blank_text=True)
@@ -82,6 +82,9 @@ def make_model(floor_size=None, terrain=False, rangefinders=False,
     # Remove target.
     target_site = xml_tools.find_element(mjcf, 'site', 'target')
     target_site.getparent().remove(target_site)
+
+  if not goal:
+    pass
 
   # Remove terrain.
   if not terrain:
@@ -451,7 +454,8 @@ class Fetch(base.Task):
     """Returns an observation to the agent."""
     obs = _common_observations(physics)
     obs['ball_state'] = physics.ball_state()
-    obs['target_position'] = physics.target_position()
+    # obs['target_position'] = physics.target_position()
+    print(obs)
     return obs
 
   def get_reward(self, physics):
@@ -468,13 +472,17 @@ class Fetch(base.Task):
         margin=arena_radius, value_at_margin=0)
 
     # Reward for bringing the ball to the target.
-    target_radius = physics.named.model.site_size['target', 0]
-    fetch_reward = rewards.tolerance(
-        physics.ball_to_target_distance(),
-        bounds=(0, target_radius),
-        sigmoid='linear',
-        margin=arena_radius, value_at_margin=0)
+    # target_radius = physics.named.model.site_size['target', 0]
+    # fetch_reward = rewards.tolerance(
+    #     physics.ball_to_target_distance(),
+    #     bounds=(0, target_radius),
+    #     sigmoid='linear',
+    #     margin=arena_radius, value_at_margin=0)
+
+    fetch_reward = 0
 
     reach_then_fetch = reach_reward * (0.5 + 0.5*fetch_reward)
 
-    return _upright_reward(physics) * reach_then_fetch
+    return fetch_reward
+    # return _upright_reward(physics) * reach_then_fetch
+
